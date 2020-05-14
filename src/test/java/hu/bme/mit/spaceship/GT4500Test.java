@@ -119,4 +119,54 @@ public class GT4500Test {
     // Assert
     assertEquals(true, result1 && result2);
   }
+
+  // Added for coverage.
+  @Test
+  public void fireTorpedo_Single_BothEmpty() {
+    // Arrange
+    when(primary.fire(1)).thenReturn(false);
+    when(primary.isEmpty()).thenReturn(true);
+    when(secondary.fire(1)).thenReturn(false);
+    when(secondary.isEmpty()).thenReturn(true);
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(false, result1 || result2);
+  }
+
+  // Added for coverage.
+  @Test
+  public void fireTorpedo_All_BothEmpty() {
+    // Arrange
+    when(primary.fire(1)).thenReturn(false);
+    when(primary.isEmpty()).thenReturn(true);
+    when(secondary.fire(1)).thenReturn(false);
+    when(secondary.isEmpty()).thenReturn(true);
+
+    // Act
+    boolean result = ship.fireTorpedo(FiringMode.ALL);
+
+    // Assert
+    assertEquals(false, result);
+  }
+
+  // Added for coverage.
+  @Test
+  public void fireTorpedo_Single_CoveregeForBadCode() {
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    when(primary.fire(1)).thenReturn(false);
+    when(primary.isEmpty()).thenReturn(true);
+    when(secondary.fire(1)).thenReturn(false);
+    when(secondary.isEmpty()).thenReturn(true);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result1);
+    assertEquals(false, result2);
+  }
 }
