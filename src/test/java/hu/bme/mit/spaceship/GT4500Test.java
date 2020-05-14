@@ -23,6 +23,7 @@ public class GT4500Test {
     this.ship = new GT4500(primary, secondary);
   }
 
+  /// Original
   @Test
   public void fireTorpedo_Single_Success() {
     // Arrange
@@ -34,6 +35,7 @@ public class GT4500Test {
     assertEquals(true, result);
   }
 
+  /// Original
   @Test
   public void fireTorpedo_All_Success() {
     // Arrange
@@ -45,4 +47,76 @@ public class GT4500Test {
     assertEquals(true, result);
   }
 
+  /// Specification-based
+  @Test
+  public void fireTorpedo_Single_PrimaryFirst() {
+    // Arrange
+
+    // Act
+    boolean result = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result);
+    verify(primary, times(1)).fire(1);
+    verify(secondary, times(0)).fire(1);
+  }
+
+  /// Specification-based
+  @Test
+  public void fireTorpedo_Single_SecondarySecond() {
+    // Arrange
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result1 && result2);
+    verify(primary, times(1)).fire(1);
+    verify(secondary, times(1)).fire(1);
+  }
+
+  /// Mixed
+  @Test
+  public void fireTorpedo_Single_AdaptToEmptySecondary() {
+    // Arrange
+    when(secondary.fire(1)).thenReturn(false);
+    when(secondary.isEmpty()).thenReturn(true);
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result1 && result2);
+  }
+
+  /// Mixed
+  @Test
+  public void fireTorpedo_Single_AdaptToEmptyPrimary() {
+    // Arrange
+    when(primary.fire(1)).thenReturn(false);
+    when(primary.isEmpty()).thenReturn(true);
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result1 && result2);
+  }
+
+  /// Structural
+  @Test
+  public void fparameterlessConstructor() {
+    // Arrange
+    ship = new GT4500();
+
+    // Act
+    boolean result1 = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean result2 = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    assertEquals(true, result1 && result2);
+  }
 }
